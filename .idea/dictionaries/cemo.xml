@@ -2,7 +2,10 @@
   <dictionary name="cemo">
     <words>
       <w>hbox</w>
+      <w>hboxes</w>
+      <w>makara</w>
       <w>maks</w>
+      <w>vbox</w>
     </words>
   </dictionary>
 </component>

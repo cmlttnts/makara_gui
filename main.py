@@ -1,14 +1,22 @@
 
 import sys
-from PyQt5.QtWidgets import (QWidget, QPushButton, QLabel, QGridLayout, QStackedWidget, QLineEdit,
-							 QHBoxLayout, QVBoxLayout, QApplication, QLineEdit, QFormLayout)
+from PyQt5.QtWidgets import (QWidget, QPushButton, QLabel, QStackedWidget,
+							QHBoxLayout, QVBoxLayout, QApplication, QLineEdit)
+
 
 class MyWindow(QWidget):
 
 	def __init__(self):
 		super(MyWindow, self).__init__()
 
+		self.mak_num_line = QLineEdit()
+		self.mak_num_label = QLabel("Makara Sayısı:")
+		self.line_edits_z = []
+		self.line_edits_y = []
+		self.line_edits_x = []
 		self.mak_num_but = QPushButton("Next")
+		self.xyz_next_button = QPushButton("Next")
+		self.xyz_back_button = QPushButton("Back")
 		#self.mak_num_but.setEnabled(False)
 		self.Page1 = QWidget()
 		self.Page2 = QWidget()
@@ -29,8 +37,6 @@ class MyWindow(QWidget):
 		self.show()
 
 	def page1_ui(self):
-		self.mak_num_label = QLabel("Makara Sayısı:")
-		self.mak_num_line = QLineEdit()
 		hbox = QHBoxLayout()
 		hbox.addWidget(self.mak_num_label)
 		hbox.addWidget(self.mak_num_line)
@@ -41,46 +47,57 @@ class MyWindow(QWidget):
 		self.Page1.setLayout(vbox)
 
 	def page2_ui(self, mak_num):
-		line_edits_x = []
-		line_edits_y = []
-		line_edits_z = []
 		hboxes = [] # horizontal layout
 		vbox2 = QVBoxLayout() # vertical layout
-		self.button2 = QPushButton("Next")
 
-		# TODO make x,y,z inputs for each makara
+		# TODO make x,y,z inputs for each makara and return it
 		for i in range(mak_num):
 			# each makara should get a horizontal line
 			hboxes.append(QHBoxLayout())
 			label = QLabel("Makara "+ str(i))
-			line_edits_x.append(QLineEdit())
-			line_edits_y.append(QLineEdit())
-			line_edits_z.append(QLineEdit())
+			self.line_edits_x.append(QLineEdit())
+			self.line_edits_y.append(QLineEdit())
+			self.line_edits_z.append(QLineEdit())
 
 			hboxes[i].addWidget(label)
 			hboxes[i].addWidget(QLabel("x:"))
-			hboxes[i].addWidget(line_edits_x[i])
+			hboxes[i].addWidget(self.line_edits_x[i])
 
 			hboxes[i].addWidget(QLabel("y:"))
-			hboxes[i].addWidget(line_edits_y[i])
+			hboxes[i].addWidget(self.line_edits_y[i])
 
 			hboxes[i].addWidget(QLabel("z:"))
-			hboxes[i].addWidget(line_edits_z[i])
+			hboxes[i].addWidget(self.line_edits_z[i])
 
 			# Each horizontal line should be listed vertically
 			vbox2.addLayout(hboxes[i])
-		vbox2.addWidget(self.button2)
-
+		hbox3 = QHBoxLayout()
+		hbox3.addWidget(self.xyz_back_button)
+		hbox3.addWidget(self.xyz_next_button)
+		vbox2.addLayout(hbox3)
 		self.Page2.setLayout(vbox2)
 
 	# TODO: num_of_maks should be checked if integer and 0 < num
 	def mak_num_but_func(self):
-		num_of_maks = int (self.mak_num_line.text())
+		try:
+			num_of_maks = int(self.mak_num_line.text())
+		except ValueError:
+			self.mak_num_line.setText("Try numbers")
+			return
+
 		self.page2_ui(num_of_maks)
 		self.Stack_of_Pages.setCurrentIndex(1)
+
+	def check_xyz_ok(self):
+		pass
 
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	ex = MyWindow()
-	sys.exit(app.exec_())
+	try:
+		fail = app.exec_()
+	except Exception as e:
+		print(e)
+	print("HELLO")
+
