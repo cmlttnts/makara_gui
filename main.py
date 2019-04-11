@@ -8,13 +8,9 @@ class MyWindow(QWidget):
 	def __init__(self):
 		super(MyWindow, self).__init__()
 
-
 		self.mak_num_but = QPushButton("Ok")
 		self.Page1 = QWidget()
 		self.Page2 = QWidget()
-
-
-
 
 		self.page1_ui()
 
@@ -24,8 +20,6 @@ class MyWindow(QWidget):
 
 		hbox = QHBoxLayout()
 		hbox.addWidget(self.Stack_of_Pages)
-
-
 
 		self.setLayout(hbox)
 		self.mak_num_but.clicked.connect(self.mak_num_but_func)
@@ -43,13 +37,26 @@ class MyWindow(QWidget):
 		self.Page1.setLayout(hbox)
 
 	def page2_ui(self, mak_num):
+		line_edits = []
 		buttons = []
-		hbox2 = QHBoxLayout()
+		hboxes = [] # horizontal layout
+		vbox2 = QVBoxLayout() # vertical layout
 
+		# TODO make x,y,z inputs for each makara
 		for i in range(mak_num):
-			buttons.append(QPushButton("button " + str(i)))
-			hbox2.addWidget(buttons[i])
-		self.Page2.setLayout(hbox2)
+			# each makara should get a horizontal line
+			hboxes.append(QHBoxLayout())
+			buttons.append(QPushButton("Ok"))
+			label = QLabel("Makara "+ str(i))
+			line_edits.append(QLineEdit())
+
+			hboxes[i].addWidget(label)
+			hboxes[i].addWidget(line_edits[i])
+			hboxes[i].addWidget(buttons[i])
+			# Each horizontal line should be listed vertically
+			vbox2.addLayout(hboxes[i])
+
+		self.Page2.setLayout(vbox2)
 
 	# TODO: num_of_maks should be checked if integer and 0 < num
 	def mak_num_but_func(self):
