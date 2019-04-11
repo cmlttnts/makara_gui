@@ -8,7 +8,8 @@ class MyWindow(QWidget):
 	def __init__(self):
 		super(MyWindow, self).__init__()
 
-		self.mak_num_but = QPushButton("Ok")
+		self.mak_num_but = QPushButton("Next")
+		#self.mak_num_but.setEnabled(False)
 		self.Page1 = QWidget()
 		self.Page2 = QWidget()
 
@@ -33,28 +34,42 @@ class MyWindow(QWidget):
 		hbox = QHBoxLayout()
 		hbox.addWidget(self.mak_num_label)
 		hbox.addWidget(self.mak_num_line)
-		hbox.addWidget(self.mak_num_but)
-		self.Page1.setLayout(hbox)
+		vbox = QVBoxLayout()
+		vbox.addLayout(hbox)
+		vbox.addWidget(self.mak_num_but)
+
+		self.Page1.setLayout(vbox)
 
 	def page2_ui(self, mak_num):
-		line_edits = []
-		buttons = []
+		line_edits_x = []
+		line_edits_y = []
+		line_edits_z = []
 		hboxes = [] # horizontal layout
 		vbox2 = QVBoxLayout() # vertical layout
+		self.button2 = QPushButton("Next")
 
 		# TODO make x,y,z inputs for each makara
 		for i in range(mak_num):
 			# each makara should get a horizontal line
 			hboxes.append(QHBoxLayout())
-			buttons.append(QPushButton("Ok"))
 			label = QLabel("Makara "+ str(i))
-			line_edits.append(QLineEdit())
+			line_edits_x.append(QLineEdit())
+			line_edits_y.append(QLineEdit())
+			line_edits_z.append(QLineEdit())
 
 			hboxes[i].addWidget(label)
-			hboxes[i].addWidget(line_edits[i])
-			hboxes[i].addWidget(buttons[i])
+			hboxes[i].addWidget(QLabel("x:"))
+			hboxes[i].addWidget(line_edits_x[i])
+
+			hboxes[i].addWidget(QLabel("y:"))
+			hboxes[i].addWidget(line_edits_y[i])
+
+			hboxes[i].addWidget(QLabel("z:"))
+			hboxes[i].addWidget(line_edits_z[i])
+
 			# Each horizontal line should be listed vertically
 			vbox2.addLayout(hboxes[i])
+		vbox2.addWidget(self.button2)
 
 		self.Page2.setLayout(vbox2)
 
