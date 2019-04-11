@@ -3,6 +3,8 @@ import sys
 from PyQt5.QtWidgets import (QWidget, QPushButton, QLabel, QStackedWidget,
 							QHBoxLayout, QVBoxLayout, QApplication, QLineEdit)
 
+makara_coords = []
+
 
 class MyWindow(QWidget):
 
@@ -17,7 +19,7 @@ class MyWindow(QWidget):
 		self.mak_num_but = QPushButton("Next")
 		self.xyz_next_button = QPushButton("Next")
 		self.xyz_back_button = QPushButton("Back")
-		#self.mak_num_but.setEnabled(False)
+		# self.mak_num_but.setEnabled(False)
 		self.Page1 = QWidget()
 		self.Page2 = QWidget()
 
@@ -32,6 +34,8 @@ class MyWindow(QWidget):
 
 		self.setLayout(hbox)
 		self.mak_num_but.clicked.connect(self.mak_num_but_func)
+		self.xyz_next_button.clicked.connect(self.xyz_next_func)
+
 		self.setGeometry(100, 100, 100, 100)
 		self.setWindowTitle("Makara")
 		self.show()
@@ -59,13 +63,15 @@ class MyWindow(QWidget):
 			self.line_edits_y.append(QLineEdit())
 			self.line_edits_z.append(QLineEdit())
 
+			# name of the makara
 			hboxes[i].addWidget(label)
+			# x value box
 			hboxes[i].addWidget(QLabel("x:"))
 			hboxes[i].addWidget(self.line_edits_x[i])
-
+			# y value box
 			hboxes[i].addWidget(QLabel("y:"))
 			hboxes[i].addWidget(self.line_edits_y[i])
-
+			# z value box
 			hboxes[i].addWidget(QLabel("z:"))
 			hboxes[i].addWidget(self.line_edits_z[i])
 
@@ -84,12 +90,36 @@ class MyWindow(QWidget):
 		except ValueError:
 			self.mak_num_line.setText("Try numbers")
 			return
-
+		self.num_maks = num_of_maks
 		self.page2_ui(num_of_maks)
 		self.Stack_of_Pages.setCurrentIndex(1)
 
-	def check_xyz_ok(self):
-		pass
+	def xyz_next_func(self):
+		mak_coords = []
+		temp = []
+		m, k = 0, 0
+		mak_num = self.num_maks
+		try:
+			for i in range(mak_num):
+				m = i
+				temp.append(float(self.line_edits_x[i].text()))
+				k += 1
+				temp.append(float(self.line_edits_y[i].text()))
+				k += 1
+				temp.append(float(self.line_edits_z[i].text()))
+				#print(temp)
+				mak_coords.append(temp)
+				temp = []
+		except ValueError:
+			if k == 0:
+				self.line_edits_x[m].setText("Try again")
+			elif k == 1:
+				self.line_edits_y[m].setText("Try again")
+			else:
+				self.line_edits_z[m].setText("Try again")
+			return
+		global makara_coords
+		makara_coords = mak_coords
 
 
 if __name__ == '__main__':
@@ -99,5 +129,5 @@ if __name__ == '__main__':
 		fail = app.exec_()
 	except Exception as e:
 		print(e)
-	print("HELLO")
+	print(makara_coords)
 
