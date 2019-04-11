@@ -1,30 +1,44 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
-from time import sleep
+import sys
 
-class Test(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        super(Test, self).__init__(parent)
-        button = QtWidgets.QPushButton("Button")
-        hbox = QtWidgets.QHBoxLayout()
-        hbox.addWidget(button)
-        self.setLayout(hbox)
-        button.clicked.connect(self.slot)
-
-    def slot(self):
-        progress = QtWidgets.QProgressDialog(self)
-        progress.setWindowModality(QtCore.Qt.WindowModal)
-        progress.setLabel(QtWidgets.QLabel("Doing things..."))
-        progress.setAutoClose(True)
-        for i in range(101):
-             progress.setValue(i);
-             sleep(0.05)
-             if progress.wasCanceled():
-                 break
+from PyQt5.QtWidgets import QApplication, QMessageBox, QMainWindow, QAction
 
 
-if __name__=="__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    myapp = Test()
-    myapp.show()
+class  Ui_MainWindow(QMainWindow):
+    def __init__(self):
+
+        QMainWindow.__init__(self)
+
+    def setupUI(self):
+
+        self.setGeometry(500, 300, 700, 700)
+
+        self.setWindowTitle("window")
+
+        finish = QAction("Quit", self)
+        finish.triggered.connect(self.closeEvent)
+
+        menubar = self.menuBar()
+        fmenu = menubar.addMenu("File")
+        fmenu.addAction(finish)
+
+    def retranslateUi(self):
+        ## codes
+        codes = "___"
+
+
+    def closeEvent(self, event):
+        close = QMessageBox.question(self,
+                                     "QUIT",
+                                     "Sure?",
+                                      QMessageBox.Yes | QMessageBox.No)
+        if close == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Ui_MainWindow()
+    window.setupUI()
+    window.show()
     sys.exit(app.exec_())

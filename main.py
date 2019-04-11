@@ -36,7 +36,7 @@ class MyWindow(QWidget):
 		self.mak_num_but.clicked.connect(self.mak_num_but_func)
 		self.xyz_next_button.clicked.connect(self.xyz_next_func)
 
-		self.setGeometry(100, 100, 100, 100)
+		self.setGeometry(100, 100, 500, 500)
 		self.setWindowTitle("Makara")
 		self.show()
 
@@ -54,7 +54,6 @@ class MyWindow(QWidget):
 		hboxes = [] # horizontal layout
 		vbox2 = QVBoxLayout() # vertical layout
 
-		# TODO make x,y,z inputs for each makara and return it
 		for i in range(mak_num):
 			# each makara should get a horizontal line
 			hboxes.append(QHBoxLayout())
@@ -87,6 +86,12 @@ class MyWindow(QWidget):
 	def mak_num_but_func(self):
 		try:
 			num_of_maks = int(self.mak_num_line.text())
+			if num_of_maks <= 0:
+				self.mak_num_line.setText("Try positive integers")
+				return
+			elif num_of_maks > 10:
+				self.mak_num_line.setText("Try smaller integers")
+				return
 		except ValueError:
 			self.mak_num_line.setText("Try numbers")
 			return
@@ -107,16 +112,16 @@ class MyWindow(QWidget):
 				temp.append(float(self.line_edits_y[i].text()))
 				k += 1
 				temp.append(float(self.line_edits_z[i].text()))
-				#print(temp)
 				mak_coords.append(temp)
 				temp = []
+				k = 0
 		except ValueError:
 			if k == 0:
-				self.line_edits_x[m].setText("Try again")
+				self.line_edits_x[m].setText("Error!")
 			elif k == 1:
-				self.line_edits_y[m].setText("Try again")
+				self.line_edits_y[m].setText("Error!")
 			else:
-				self.line_edits_z[m].setText("Try again")
+				self.line_edits_z[m].setText("Error!")
 			return
 		global makara_coords
 		makara_coords = mak_coords
@@ -126,7 +131,7 @@ if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	ex = MyWindow()
 	try:
-		fail = app.exec_()
+		app.exec_()
 	except Exception as e:
 		print(e)
 	print(makara_coords)
